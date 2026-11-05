@@ -1,14 +1,14 @@
-#בחירת תמונה של גירסא
-FROM pyton:3.12.7-slim
-#יצירת תקיה בתוך הקונטינר
+# תמונת בסיס של Python בגרסה קבועה
+FROM python:3.11-slim
+# תיקיית העבודה בתוך הקונטיינר
 WORKDIR /app
-#העתקת הקובץ בלבד לפני העתקת הקוד
-COPY requirements.txt
-#התקנת התלויות
-RUN pip install --no-cache-dir -r  requirements.txt
-#העתקת הבצים לקונטיינר
-COPY . 
-#באיזה פורט
+# קודם רק קובץ התלויות, בשביל ה-cache
+COPY requirements.txt .
+# התקנת התלויות
+RUN pip install --no-cache-dir -r requirements.txt
+# אחר כך הקוד
+COPY app.py .
+# הפורט שהאפליקציה מאזינה לו
 EXPOSE 5000
-#הפעלת האפליקציה
-CMD ["pyton","main.py"]
+# הפעלת האפליקציה
+CMD ["python", "app.py"]
