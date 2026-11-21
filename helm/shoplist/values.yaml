@@ -5,20 +5,51 @@ backend:
   image:
     repository: shoplist-backend
     tag: local
-fronted:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+frontend:
   replicas: 1
   nodePort: 30080
   image:
    repository: shoplist-frontend
    tag: local
+  resources:
+    requests:
+      cpu: 50m
+      memory: 32Mi
+    limits:
+      cpu: 200m
+      memory: 64Mi
 stats:
   replicas: 1
   image:  
    repository: shoplist-stats
    tag: local
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
 postgres:
   database: shoplist
   user: shopuser
   password: shoppass
   storage: 1Gi
-  
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 512Mi
+backup:
+  enabled: true
+  schedule: "0 2 * * *"
+  storage: 1Gi

@@ -5,7 +5,7 @@ metadata:
   name: postgres-pvc        # postgres-deployment requests the storage by this exact name
   namespace: {{.Release.Namespace}}
   annotations: 
-  helm.sh/resource-policy: keep
+    helm.sh/resource-policy: keep
 spec:
   accessModes:
     - ReadWriteOnce               # only one node writes at a time

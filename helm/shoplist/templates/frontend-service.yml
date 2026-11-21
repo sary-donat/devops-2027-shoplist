@@ -18,6 +18,6 @@ spec:
   ports:
     - port: 80
       targetPort: 80
-      nodePort: {{.Values.fronted.nodePort}}
+      nodePort: {{.Values.frontend.nodePort}}
 
                               

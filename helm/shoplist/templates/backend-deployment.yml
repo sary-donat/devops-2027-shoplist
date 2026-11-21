@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: {{ .Release.Name }}--backend
   namespace: {{.Release.Namespace}}
 spec:
   replicas:  {{ .Values.backend.replicas }}
@@ -30,7 +30,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: postgres-secret 
-                  key: POSTGRES-USER        # which key holds the user?
+                  key: POSTGRES_USER        # which key holds the user?
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -44,3 +44,10 @@ spec:
               port: 5000
             initialDelaySeconds: 5
             periodSeconds: 10
+          resources:
+            requests:
+              cpu: {{ .Values.backend.resources.requests.cpu | quote }}
+              memory: {{ .Values.backend.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.backend.resources.limits.cpu | quote }}
+              memory: {{ .Values.backend.resources.limits.memory }}

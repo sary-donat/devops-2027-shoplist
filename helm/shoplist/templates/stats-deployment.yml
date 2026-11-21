@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: stats
+  name: {{ .Release.Name }}--stats
   namespace: {{.Release.Namespace}}
 spec:
   replicas: {{.Values.stats.replicas}}
@@ -18,7 +18,7 @@ spec:
       containers:
         - name: stats
           image: {{.Values.stats.image.repository}}:{{.Values.stats.image.tag}}
-          imagePullPolicy: Never
+          imagePullPolicy: {{.Values.imagePullPolicy}}
           env:
             - name: BACKEND_URL
               value: http://backend:5000        # backend Service name, with http:// and port
@@ -30,3 +30,10 @@ spec:
               port: 3000
             initialDelaySeconds: 5
             periodSeconds: 10
+          resources:
+           requests:
+             cpu: {{ .Values.stats.resources.requests.cpu | quote }}
+             memory: {{ .Values.stats.resources.requests.memory }}
+           limits:
+             cpu: {{ .Values.stats.resources.limits.cpu | quote }}
+             memory: {{ .Values.stats.resources.limits.memory }}

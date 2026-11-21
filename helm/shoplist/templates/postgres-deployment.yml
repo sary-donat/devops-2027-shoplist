@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment                       # which resource keeps pods running?
 metadata:
-  name: postgres
+  name: {{ .Release.Name }}--postgres
   namespace: {{.Release.Namespace}}
 spec:
   replicas: 1                       #usually we have only one in data-base besides a special one
@@ -28,6 +28,13 @@ spec:
               command: ["pg_isready", "-U", {{.Values.postgres.user | quote}}, "-d", {{.Values.postgres.database | quote}}]   # user and database from the Secret, plain text
             initialDelaySeconds: 5
             periodSeconds: 10
+          resources:
+           requests:
+             cpu: {{ .Values.postgres.resources.requests.cpu | quote }}
+             memory: {{ .Values.postgres.resources.requests.memory }}
+           limits:
+             cpu: {{ .Values.postgres.resources.limits.cpu | quote }}
+             memory: {{ .Values.postgres.resources.limits.memory }}
           volumeMounts:  #אומר מאיזה ניתוב לשאוב את המידע מאיזה ארונית
             - name: postgres-data            # must match the storage volume name below
               mountPath: /var/lib/postgresql/data

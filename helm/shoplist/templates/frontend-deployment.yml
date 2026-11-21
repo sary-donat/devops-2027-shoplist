@@ -12,7 +12,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: {{ .Release.Name }}--frontend
   namespace: {{.Release.Namespace}}
 spec:
   replicas: {{.Values.frontend.replicas}}
@@ -26,11 +26,19 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: {{.Values.fronted.image.repository}}:{{.value.fronted.image.tag}}
-          imagePullPolicy: Never
+          image: {{.Values.frontend.image.repository}}:{{.Values.frontend.image.tag}}
+          imagePullPolicy: {{.Values.imagePullPolicy}}
           env:
             - name: BACKEND_URL
               value: http://backend:5000        # backend Service name, with http:// and port
           ports:
             - containerPort: 80
+          resources:
+            requests:
+             cpu: {{ .Values.frontend.resources.requests.cpu | quote }}
+             memory: {{ .Values.frontend.resources.requests.memory }}
+            limits:
+             cpu: {{ .Values.frontend.resources.limits.cpu | quote }}
+             memory: {{ .Values.frontend.resources.limits.memory }}
+        
        
